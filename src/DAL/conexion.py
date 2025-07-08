@@ -19,4 +19,5 @@ class Conexion():
             print("Se estableció la conexión con la base de datos")
         else:
             print("No hay conexión")
-            
+            pass
+        
