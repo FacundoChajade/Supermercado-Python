@@ -16,6 +16,6 @@ class Conexion():
         if self.conn:
             self.conn.close()
             self.conn = None
-            print("Se estableció la conexión con la base de datos")
+            print("Se terminó la conexión con la base de datos")
         else:
             print("No hay conexión")
