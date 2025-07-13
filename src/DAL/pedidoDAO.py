@@ -6,7 +6,7 @@ class PedidoDAO():
         if len(pedido.listaProductos) != 0:
             self.conexion.conectar()
             cursor = self.conexion.conn.cursor()
-            cursor.execute("INSERT INTO pedido (cliente) VALUES (%s)",(pedido.cliente_id))
+            cursor.execute("INSERT INTO pedido (dni_cliente) VALUES (%s)",(pedido.cliente_id))
             try:
                 pedido.id = cursor.lastrowid
                 if pedido.id:

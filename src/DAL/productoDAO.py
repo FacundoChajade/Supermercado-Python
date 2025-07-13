@@ -1,4 +1,4 @@
-from logica.productoVO import ProductoVO
+from models.productoVO import ProductoVO
 class ProductoDAO:
     def __init__(self,conexion):
         self.conexion = conexion
