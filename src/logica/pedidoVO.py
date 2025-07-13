@@ -5,5 +5,5 @@ class PedidoVO:
         self.cliente_id = cliente_id
         self.listaProductos = []
 
-    def agregarProducto(self,producto,cantidad_recibida,cantidad_pedida):
-        self.listaProductos.append((producto, cantidad_recibida, cantidad_pedida))
+    def agregarProducto(self,producto,cantidad_pedida):
+        self.listaProductos.append((producto, cantidad_pedida))

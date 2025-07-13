@@ -1,0 +1,20 @@
+# Cache y bytecode Python
+__pycache__/
+*.py[cod]
+
+# Entornos virtuales
+env/
+venv/
+
+# Configuración editor
+.vscode/
+
+# Logs
+*.log
+
+# Archivos temporales
+.DS_Store
+Thumbs.db
+
+# Logs del proyecto
+registros.txt
