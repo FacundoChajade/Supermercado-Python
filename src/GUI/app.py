@@ -10,7 +10,6 @@ import threading as th
 import os
 import time
 
-# Funciones de lógica (idénticas a main.py)
 def accion_cliente(pedido, condicion, conexion):
     with condicion:
         condicion.wait()
@@ -60,21 +59,21 @@ class SupermercadoApp(tk.Tk):
         self.num_cliente = 0
         self.dnis = []
         self.frames = []
-        self.show_inicio()
+        self.mostrar_inicio()
 
-    def show_inicio(self):
+    def mostrar_inicio(self):
         self.clear_frames()
         frame = tk.Frame(self)  # Crea un contenedor para agrupar widgets
         frame.pack(expand=True, fill="both")  # Hace que el frame ocupe todo el espacio disponible
         tk.Label(frame, text="Supermercado", font=("Arial", 18)).pack(pady=10)  # Muestra un texto estático
         tk.Label(frame, text="¿Qué desea realizar?").pack(pady=10)  # Muestra otro texto
-        btn1 = tk.Button(frame, text="Ingresar pedidos", command=self.show_cant_clientes)  # Botón que llama a una función
+        btn1 = tk.Button(frame, text="Ingresar pedidos", command=self.mostrar_cant_clientes)  # Botón que llama a una función
         btn1.pack(pady=5)  # Coloca el botón en el frame
-        btn2 = tk.Button(frame, text="Ver informes", command=self.show_informes)  # Otro botón
+        btn2 = tk.Button(frame, text="Ver informes", command=self.mostrar_informes)  # Otro botón
         btn2.pack(pady=5)     
         self.frames.append(frame)
 
-    def show_cant_clientes(self):
+    def mostrar_cant_clientes(self):
         self.clear_frames()
         frame = tk.Frame(self)
         frame.pack(expand=True, fill="both")
@@ -97,9 +96,9 @@ class SupermercadoApp(tk.Tk):
         self.repositor.start()
         self.productos_cargados.wait()
         self.productos = list(self.productos_compartidos)
-        self.show_canasta()
+        self.mostrar_canasta()
 
-    def show_canasta(self):
+    def mostrar_canasta(self):
         self.clear_frames()
         frame = tk.Frame(self)
         frame.pack(expand=True, fill="both")
@@ -107,11 +106,11 @@ class SupermercadoApp(tk.Tk):
         for prod in self.productos:
             info = f"{prod.get_nombre()} : {prod.get_cantidad()}u  {prod.get_precio()}usd"
             tk.Label(frame, text=info).pack(anchor="center")
-        btn = tk.Button(frame, text="Siguiente", command=self.show_dni_cliente)
+        btn = tk.Button(frame, text="Siguiente", command=self.mostrar_dni_cliente)
         btn.pack(pady=15)
         self.frames.append(frame)
 
-    def show_dni_cliente(self):
+    def mostrar_dni_cliente(self):
         self.clear_frames()
         frame = tk.Frame(self)
         frame.pack(expand=True, fill="both")
@@ -127,20 +126,20 @@ class SupermercadoApp(tk.Tk):
                 if dni < 1:
                     raise ValueError("Ingrese un DNI válido (número mayor a 0)")
                 self.dnis.append(dni)
-                self.show_pedido_cliente()
+                self.mostrar_pedido_cliente()
             except ValueError as e:
                 messagebox.showerror("Error", e)
         btn = tk.Button(frame, text="Siguiente", command=validar_y_continuar)
         btn.pack(pady=10)
         self.frames.append(frame)
 
-    def show_pedido_cliente(self):
+    def mostrar_pedido_cliente(self):
         self.clear_frames()
         frame = tk.Frame(self)
         frame.pack(expand=True, fill="both")
         tk.Label(frame, text=f"Cliente N°{self.num_cliente+1}", font=("Arial", 14)).pack(pady=10)
         tk.Label(frame, text="Canasta").pack()
-        entries = []
+        entradas = []
         for prod in self.productos:
             fila = tk.Frame(frame)  # Crea una fila para cada producto
             fila.pack(pady=2)
@@ -148,33 +147,33 @@ class SupermercadoApp(tk.Tk):
             var = tk.IntVar(value=0)  # Variable entera para el spinbox
             spin = tk.Spinbox(fila, from_=0, to=prod.get_cantidad(), width=5, textvariable=var)  # Spinbox para cantidad
             spin.pack(side="left", padx=5)
-            entries.append((prod, var))
+            entradas.append((prod, var))
         total_label = tk.Label(frame, text="Total: $0")  # Etiqueta para mostrar el total
         total_label.pack(pady=5)
         def update_total(*args):
             total = 0
-            for prod, var in entries:
+            for prod, var in entradas:
                 try:
                     total += int(var.get()) * prod.get_precio()
                 except:
                     pass
             total_label.config(text=f"Total: ${total}")
-        for _, var in entries:
+        for _, var in entradas:
             var.trace_add('write', update_total)
-        btn = tk.Button(frame, text="Enviar", command=lambda: self.guardar_pedido(entries))
+        btn = tk.Button(frame, text="Enviar", command=lambda: self.guardar_pedido(entradas))
         btn.pack(pady=10)
         self.frames.append(frame)
 
-    def guardar_pedido(self, entries):
+    def guardar_pedido(self, entradas):
         pedido = PedidoVO(self.dnis[self.num_cliente])
-        for prod, var in entries:
+        for prod, var in entradas:
             cantidad = int(var.get())
             if cantidad > 0:
                 pedido.agregarProducto(prod, cantidad)
         self.pedidos.append(pedido)
         self.num_cliente += 1
         if self.num_cliente < self.cant_clientes:
-            self.show_dni_cliente()
+            self.mostrar_dni_cliente()
         else:
             self.procesar_pedidos_concurrentes()
 
@@ -197,9 +196,9 @@ class SupermercadoApp(tk.Tk):
         self.anotador = mp.Process(target=registrar_pedidos, args=(self.conexion,))
         self.anotador.start()
         self.anotador.join()
-        self.show_informes()
+        self.mostrar_informes()
 
-    def show_informes(self):
+    def mostrar_informes(self):
         self.clear_frames()
         frame = tk.Frame(self)
         frame.pack(expand=True, fill="both")
@@ -212,11 +211,11 @@ class SupermercadoApp(tk.Tk):
         text.insert("1.0", informe)  # Inserta texto en el área de texto
         text.config(state="disabled")  # Hace el área de texto de solo lectura
         text.pack(pady=5)
-        btn_volver = tk.Button(frame, text="Volver inicio", command=self.show_inicio)
+        btn_volver = tk.Button(frame, text="Volver inicio", command=self.mostrar_inicio)
         btn_volver.pack(pady=15)
         self.frames.append(frame)
 
-    def show_detalle_pedido(self, idx):
+    def mostrar_detalle_pedido(self, idx):
         pass
 
     def clear_frames(self):
